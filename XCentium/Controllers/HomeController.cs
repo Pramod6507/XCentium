@@ -51,6 +51,7 @@ namespace XCentium.Controllers
                 pageDataViewModel.TimeElapsed = stopWatch.ElapsedMilliseconds;
                 pageDataViewModel.ImageAttributeList = siteHtmlAgility.ExtractImages();
                 pageDataViewModel.SiteWordList = siteHtmlAgility.ExtractText();
+                pageDataViewModel.FrequencyMap = SiteHtmlAgility.ExtractFrequencyMap(pageDataViewModel.SiteWordList);
 
                 return View(pageDataViewModel);
             }            

@@ -13,7 +13,13 @@
         </tr>
     </thead>
     <tbody>
-        <tr></tr>
+        @foreach (var frequency in Model.FrequencyMap)
+            {
+            <tr>
+                <td>@frequency.Key</td>
+                <td>@frequency.Value</td>
+            </tr>
+            }
     </tbody>
 </table>
 
