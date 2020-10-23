@@ -1,24 +1,39 @@
 ﻿using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Web;
 
 namespace XCentium.Infrastructure
 {
     public class SiteHtmlAgility
     {
-        public SiteHtmlAgility()
+        private HtmlDocument _document { get; set; }
+        private Uri _pageUrl { get; set; }
+        private HtmlWeb _web { get; set; }
+        public SiteHtmlAgility(string url)
         {
-            /* Below assigns values to ServicePointManager 
-             * inorder to bypasses the security protocol issue due to not having a SSL cert on our application.
-             * Details can be found at https://stackoverflow.com/questions/2859790/the-request-was-aborted-could-not-create-ssl-tls-secure-channel
-             */
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+            _pageUrl = new Uri(url);
+            _web = new HtmlWeb();
+
         }
-        private static List<string> ExtractText(HtmlDocument document)
+        private HtmlDocument Load()
+        {
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+            _document = _web.Load(_pageUrl);
+            stopWatch.Stop();
+            return _document;
+        }
+        private List<string> ExtractText()
         {
             List<string> textWordList = new List<string>();
-            var root = document.DocumentNode;
+            var root = _document.DocumentNode;
             char[] charsToSplit = { ' ', '\n', '\r', '\t', ':', ',', '.', '(', ')', '[', ']', '{', '}', '&' };
 
             var wordList = root.InnerText.ToLower().Split(charsToSplit);
@@ -26,14 +41,13 @@ namespace XCentium.Infrastructure
             {
                 if (!String.IsNullOrWhiteSpace(word.Trim()))
                     textWordList.Add(word.Trim());
-                //Console.WriteLine("{0}",word.Trim());
             }
             return textWordList;
         }
 
-        private static List<HtmlAttribute> ExtractImages(HtmlDocument document, string pageUrl)
+        private List<HtmlAttribute> ExtractImages()
         {
-            var imageNodes = document.DocumentNode.SelectNodes("//img").ToArray();
+            var imageNodes = _document.DocumentNode.SelectNodes("//img").ToArray();
             var allImageAttributes = new List<HtmlAttribute>();
             foreach (var imageNode in imageNodes)
             {
@@ -45,7 +59,7 @@ namespace XCentium.Infrastructure
                     {
                         if (!attribute.Value.Trim().StartsWith("https://"))
                         {
-                            attribute.Value = pageUrl + attribute.Value;
+                            attribute.Value = _pageUrl.Scheme + "://" + _pageUrl.Host + attribute.Value;
                         }
                         Console.WriteLine(attribute.Value);
                     }
