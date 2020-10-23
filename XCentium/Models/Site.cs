@@ -11,7 +11,7 @@ namespace XCentium.Models
         public int Id { get; set; }
 
         
-        [Display(Name ="Enter any URL to get image and word count data...")]
+        [Display(Name ="Site address")]
         [Required(ErrorMessage ="Please enter a URL")]
         [Url]
         public string Url { get; set; }
