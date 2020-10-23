@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using XCentium.Models;
 
 namespace XCentium.Controllers
 {
@@ -24,6 +25,16 @@ namespace XCentium.Controllers
         {
             ViewBag.Message = "Your contact page.";
 
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult PageData(Site site)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Index", site);
+            }
             return View();
         }
     }

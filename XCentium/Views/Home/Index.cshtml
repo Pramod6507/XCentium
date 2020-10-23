@@ -1,11 +1,24 @@
-﻿@{
+﻿@model XCentium.Models.Site
+@{
     ViewBag.Title = "Home Page";
 }
 
 <div class="jumbotron">
     <h1>Enter a URL</h1>
-    <p class="lead">Enter any URL to get image and word count data...</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+
+    @using (Html.BeginForm("PageData", "Home"))
+    {
+        <div class="form-group">
+            
+            @Html.LabelFor(m => m.Url, new { @class = "lead" })
+            @Html.TextBoxFor(m => m.Url, new {@class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Url)
+
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg">Submit  &raquo;</button>
+        
+    }
+
 </div>
 
 <div class="row">
@@ -29,3 +42,7 @@
         <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
     </div>
 </div>
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}

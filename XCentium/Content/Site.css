@@ -39,3 +39,12 @@ textarea {
     .image-gallery .col-md-4 {
         padding-left: 0px;
     }
+
+.field-validation-error {
+    color: red;
+    font-size: medium;
+}
+
+    .input-validation-error{
+        border: 2px solid red;
+    }
