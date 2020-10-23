@@ -22,3 +22,20 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.image-gallery {
+    margin: 0 auto;
+    overflow: hidden;
+    align-items: center;
+    justify-content: space-around;
+    display: flex;
+    float: none;
+}
+
+    .image-gallery .col-md-12 {
+        padding-left: 0px;
+    }
+
+    .image-gallery .col-md-4 {
+        padding-left: 0px;
+    }

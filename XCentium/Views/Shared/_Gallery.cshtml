@@ -1,0 +1,133 @@
+﻿<div class="row image-gallery">
+    <div class="col-md-12">
+        <figure class="col-md-4">
+            <a class="img-links" href="https://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(145).jpg" data-size="1600x1067" data-toggle="modal" data-target="#myModal">
+                <img alt="picture" src="https://mdbootstrap.com/img/Photos/Lightbox/Thumbnail/img%20(145).jpg" class="img-fluid">
+            </a>
+        </figure>
+
+        <figure class="col-md-4">
+            <a class="img-links" href="https://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(150).jpg" data-size="1600x1067" data-toggle="modal" data-target="#myModal">
+                <img alt="picture" src="https://mdbootstrap.com/img/Photos/Lightbox/Thumbnail/img%20(150).jpg" class="img-fluid" />
+            </a>
+        </figure>
+
+        <figure class="col-md-4">
+            <a class="img-links" href="https://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(152).jpg" data-size="1600x1067" data-toggle="modal" data-target="#myModal">
+                <img alt="picture" src="https://mdbootstrap.com/img/Photos/Lightbox/Thumbnail/img%20(152).jpg" class="img-fluid" />
+            </a>
+        </figure>
+
+        <figure class="col-md-4">
+            <a class="img-links" href="https://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(42).jpg" data-size="1600x1067" data-toggle="modal" data-target="#myModal">
+                <img alt="picture" src="https://mdbootstrap.com/img/Photos/Lightbox/Thumbnail/img%20(42).jpg" class="img-fluid" />
+            </a>
+        </figure>
+
+        <figure class="col-md-4">
+            <a class="img-links" href="https://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(151).jpg" data-size="1600x1067" data-toggle="modal" data-target="#myModal">
+                <img alt="picture" src="https://mdbootstrap.com/img/Photos/Lightbox/Thumbnail/img%20(151).jpg" class="img-fluid" />
+            </a>
+        </figure>
+
+        <figure class="col-md-4">
+            <a class="img-links" href="https://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(40).jpg" data-size="1600x1067" data-toggle="modal" data-target="#myModal">
+                <img alt="picture" src="https://mdbootstrap.com/img/Photos/Lightbox/Thumbnail/img%20(40).jpg" class="img-fluid" />
+            </a>
+        </figure>
+
+        <figure class="col-md-4">
+            <a class="img-links" href="https://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(148).jpg" data-size="1600x1067" data-toggle="modal" data-target="#myModal">
+                <img alt="picture" src="https://mdbootstrap.com/img/Photos/Lightbox/Thumbnail/img%20(148).jpg" class="img-fluid" />
+            </a>
+        </figure>
+
+        <figure class="col-md-4">
+            <a class="img-links" href="https://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(147).jpg" data-size="1600x1067" data-toggle="modal" data-target="#myModal">
+                <img alt="picture" src="https://mdbootstrap.com/img/Photos/Lightbox/Thumbnail/img%20(147).jpg" class="img-fluid" />
+            </a>
+        </figure>
+
+        <figure class="col-md-4">
+            <a class="img-links" href="https://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(149).jpg" data-size="1600x1067" data-toggle="modal" data-target="#myModal">
+                <img alt="picture" src="https://mdbootstrap.com/img/Photos/Lightbox/Thumbnail/img%20(149).jpg" class="img-fluid" />
+            </a>
+        </figure>
+        <figure class="col-md-4">
+            <a class="img-links" href="https://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(148).jpg" data-size="1600x1067" data-toggle="modal" data-target="#myModal">
+                <img alt="picture" src="https://mdbootstrap.com/img/Photos/Lightbox/Thumbnail/img%20(148).jpg" class="img-fluid" />
+            </a>
+        </figure>
+
+        <figure class="col-md-4">
+            <a class="img-links" href="https://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(147).jpg" data-size="1600x1067" data-toggle="modal" data-target="#myModal">
+                <img alt="picture" src="https://mdbootstrap.com/img/Photos/Lightbox/Thumbnail/img%20(147).jpg" class="img-fluid" />
+            </a>
+        </figure>
+
+        <figure class="col-md-4">
+            <a class="img-links" href="https://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(149).jpg" data-size="1600x1067" data-toggle="modal" data-target="#myModal">
+                <img alt="picture" src="https://mdbootstrap.com/img/Photos/Lightbox/Thumbnail/img%20(149).jpg" class="img-fluid" />
+            </a>
+        </figure>
+
+
+    </div>
+
+</div>
+<div style="margin: auto auto 50px auto;text-align: center;padding: 30px;">
+    <a class="btn btn-primary btn-lg image-gallery-btn" id="loadMore">View more &raquo;</a>
+</div>
+
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var imglength = $("figure").length;
+        var inc = 0;
+
+        if (imglength > 9) {
+            $("figure").slice(9, imglength).css("display", "none");
+            inc = 9;
+        }
+        if (imglength < 9) {
+            $("figure").slice(3, imglength).css("display", "none");
+            inc = 3;
+        }
+
+        $("#loadMore").click(function () {
+            if (inc == 9) {
+                $("figure").slice(inc, inc + 9).css("display", "block");
+                inc = inc + 9;
+            }
+            if (inc == 3) {
+                $("figure").slice(inc, inc + 3).css("display", "block");
+                inc = inc + 3;
+            }
+            if (inc > imglength)
+                $("#loadMore").css("display", "none");
+        });
+
+    $(".img-links").click(function () {
+        var clickedImg = $(this).find("img")[0].outerHTML;
+        $(".modal-body").html(clickedImg);
+    });
+});
+</script>
