@@ -40,13 +40,20 @@ namespace XCentium.Controllers
 
             else
             {
+                var pageDataViewModel = new PageDataViewModel();
                 var siteHtmlAgility = new SiteHtmlAgility(site.Url);
+
                 Stopwatch stopWatch = new Stopwatch();
                 stopWatch.Start();
                 siteHtmlAgility.Load();
                 stopWatch.Stop();
-            }
-            return View(site);
+
+                pageDataViewModel.TimeElapsed = stopWatch.ElapsedMilliseconds;
+                pageDataViewModel.ImageAttributeList = siteHtmlAgility.ExtractImages();
+                pageDataViewModel.SiteWordList = siteHtmlAgility.ExtractText();
+
+                return View(pageDataViewModel);
+            }            
         }
     }
 }

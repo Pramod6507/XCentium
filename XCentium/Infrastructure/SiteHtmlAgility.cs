@@ -22,11 +22,11 @@ namespace XCentium.Infrastructure
             _web = new HtmlWeb();
 
         }
-        public string Load()
+        public int Load()
         {
             _document = _web.Load(_pageUrl);
             //return _document;
-            return _web.StreamBufferSize.ToString();
+            return _web.StreamBufferSize;
         }
         public List<string> ExtractText()
         {
