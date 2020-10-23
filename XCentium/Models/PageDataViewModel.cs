@@ -10,6 +10,7 @@ namespace XCentium.Models
     {
         public List<string> SiteWordList { get; set; }
         public List<HtmlAttribute> ImageAttributeList { get; set; }
+        public Dictionary<string, int> FrequencyMap { get; set; }
         public int StreamBufferSize { get; set; }
         public long TimeElapsed { get; set; }
     }

@@ -15,17 +15,15 @@ namespace XCentium.Infrastructure
         private HtmlWeb _web { get; set; }
         public SiteHtmlAgility(string url)
         {
-            ServicePointManager.Expect100Continue = true;
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-
             _pageUrl = new Uri(url);
             _web = new HtmlWeb();
 
         }
         public int Load()
         {
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             _document = _web.Load(_pageUrl);
-            //return _document;
             return _web.StreamBufferSize;
         }
         public List<string> ExtractText()
@@ -55,16 +53,27 @@ namespace XCentium.Infrastructure
 
                     if (attribute.Name == "src")
                     {
+                        //Validation to check if the image src is in relative path of the site.
                         if (!attribute.Value.Trim().StartsWith("https://"))
                         {
                             attribute.Value = _pageUrl.Scheme + "://" + _pageUrl.Host + attribute.Value;
                         }
                         Console.WriteLine(attribute.Value);
                     }
-                }
+                    allImageAttributes.Add(attribute);
+                }                 
 
             }
             return allImageAttributes;
+        }
+
+        public static Dictionary<string, int> ExtractFrequencyMap(List<string> wordList)
+        {
+            Dictionary<string, int> frequencyMap = wordList.GroupBy(x => x)
+                .Where(g => g.Count() > 1).OrderByDescending(x => x.Count())
+                .ToDictionary(x => x.Key, x => x.Count());
+
+            return frequencyMap;
         }
     }
 }
