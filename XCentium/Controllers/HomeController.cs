@@ -35,7 +35,7 @@ namespace XCentium.Controllers
             {
                 return View("Index", site);
             }
-            return View();
+            return View(site);
         }
     }
 }

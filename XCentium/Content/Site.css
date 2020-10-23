@@ -33,11 +33,11 @@ textarea {
 }
 
     .image-gallery .col-md-12 {
-        padding-left: 0px;
+        padding-left: 0;
     }
 
     .image-gallery .col-md-4 {
-        padding-left: 0px;
+        padding-left: 0;
     }
 
 .field-validation-error {
