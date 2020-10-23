@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Web;
+﻿using System.Diagnostics;
 using System.Web.Mvc;
 using XCentium.Infrastructure;
 using XCentium.Models;
@@ -42,16 +38,19 @@ namespace XCentium.Controllers
             {
                 var pageDataViewModel = new PageDataViewModel();
                 var siteHtmlAgility = new SiteHtmlAgility(site.Url);
+                ViewBag.SiteAddress = site.Url;
 
                 Stopwatch stopWatch = new Stopwatch();
                 stopWatch.Start();
-                siteHtmlAgility.Load();
+                pageDataViewModel.StreamBufferSize = siteHtmlAgility.Load();
                 stopWatch.Stop();
+
 
                 pageDataViewModel.TimeElapsed = stopWatch.ElapsedMilliseconds;
                 pageDataViewModel.ImageAttributeList = siteHtmlAgility.ExtractImages();
                 pageDataViewModel.SiteWordList = siteHtmlAgility.ExtractText();
                 pageDataViewModel.FrequencyMap = SiteHtmlAgility.ExtractFrequencyMap(pageDataViewModel.SiteWordList);
+
 
                 return View(pageDataViewModel);
             }            

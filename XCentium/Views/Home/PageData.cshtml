@@ -3,9 +3,19 @@
     ViewBag.Title = "PageData";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<h2>PageData</h2>
-<table>
+<br/>
+<div class="panel panel-success">
+    <div class="panel-heading">
+        <h2 class="panel-title">PageData</h2>
+    </div>
+    <div class="panel-body">
+        <p class="panel-title">Following is the data from @ViewBag.SiteAddress</p><br/>
+        <p>Total words: @Model.SiteWordList.Count()</p>
+        <p>Load time: @Model.TimeElapsed milli Seconds</p>
+        <p>Memory Size: @Model.StreamBufferSize Bytes</p>
+    </div>
+</div>
+<table class="table">
     <thead>
         <tr>
             <th>Word</th>
@@ -13,17 +23,17 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var frequency in Model.FrequencyMap)
+        @foreach (var frequency in Model.FrequencyMap@*.Take(10)*@)
             {
             <tr>
                 <td>@frequency.Key</td>
                 <td>@frequency.Value</td>
             </tr>
-            }
+        }
     </tbody>
 </table>
 
-@{ 
+@{
     foreach (var attribute in Model.ImageAttributeList)
     {
 
