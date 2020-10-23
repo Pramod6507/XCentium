@@ -22,15 +22,13 @@ namespace XCentium.Infrastructure
             _web = new HtmlWeb();
 
         }
-        private HtmlDocument Load()
+        public string Load()
         {
-            Stopwatch stopWatch = new Stopwatch();
-            stopWatch.Start();
             _document = _web.Load(_pageUrl);
-            stopWatch.Stop();
-            return _document;
+            //return _document;
+            return _web.StreamBufferSize.ToString();
         }
-        private List<string> ExtractText()
+        public List<string> ExtractText()
         {
             List<string> textWordList = new List<string>();
             var root = _document.DocumentNode;
@@ -45,7 +43,7 @@ namespace XCentium.Infrastructure
             return textWordList;
         }
 
-        private List<HtmlAttribute> ExtractImages()
+        public List<HtmlAttribute> ExtractImages()
         {
             var imageNodes = _document.DocumentNode.SelectNodes("//img").ToArray();
             var allImageAttributes = new List<HtmlAttribute>();

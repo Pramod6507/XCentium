@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using XCentium.Infrastructure;
 using XCentium.Models;
 
 namespace XCentium.Controllers
@@ -36,6 +38,14 @@ namespace XCentium.Controllers
                 return View("Index", site);
             }
 
+            else
+            {
+                var siteHtmlAgility = new SiteHtmlAgility(site.Url);
+                Stopwatch stopWatch = new Stopwatch();
+                stopWatch.Start();
+                siteHtmlAgility.Load();
+                stopWatch.Stop();
+            }
             return View(site);
         }
     }

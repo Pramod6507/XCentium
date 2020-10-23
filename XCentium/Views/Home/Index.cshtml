@@ -9,7 +9,7 @@
     @using (Html.BeginForm("PageData", "Home"))
     {
         <div class="form-group">
-            <label class="lead">Enter any URL to get image and word count data...</label>
+            <label class="lead">Please enter a site address below to get image and word count data...</label>
             @*@Html.LabelFor(m => m.Url, new { @class = "lead" })*@
             @Html.TextBoxFor(m => m.Url, new {@class = "form-control" })
             @Html.ValidationMessageFor(m => m.Url)
