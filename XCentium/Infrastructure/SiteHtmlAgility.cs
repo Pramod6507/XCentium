@@ -21,10 +21,19 @@ namespace XCentium.Infrastructure
         }
         public int Load()
         {
-            ServicePointManager.Expect100Continue = true;
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            _document = _web.Load(_pageUrl);
-            return _web.StreamBufferSize;
+            try
+            {
+                ServicePointManager.Expect100Continue = true;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                _document = _web.Load(_pageUrl);
+                return _web.StreamBufferSize;
+            }
+            catch (Exception)
+            {
+
+                throw new AccessViolationException("The site is not accessible from this application");
+            }
+
         }
         public List<string> ExtractText()
         {
@@ -43,26 +52,31 @@ namespace XCentium.Infrastructure
 
         public List<HtmlAttribute> ExtractImages()
         {
-            var imageNodes = _document.DocumentNode.SelectNodes("//img").ToArray();
             var allImageAttributes = new List<HtmlAttribute>();
-            foreach (var imageNode in imageNodes)
+            if (!(_document.DocumentNode.SelectNodes("//img").Count() == 0))
             {
-                var imageAttributes = imageNode.Attributes.ToList();
-                foreach (var attribute in imageAttributes)
+                var imageNodes = _document.DocumentNode.SelectNodes("//img").ToArray();
+                
+                foreach (var imageNode in imageNodes)
                 {
-
-                    if (attribute.Name == "src")
+                    var imageAttributes = imageNode.Attributes.ToList();
+                    foreach (var attribute in imageAttributes)
                     {
-                        //Validation to check if the image src is in relative path of the site.
-                        if (!attribute.Value.Trim().StartsWith("https://"))
-                        {
-                            attribute.Value = _pageUrl.Scheme + "://" + _pageUrl.Host + attribute.Value;
-                        }
-                        Console.WriteLine(attribute.Value);
-                    }
-                    allImageAttributes.Add(attribute);
-                }                 
 
+                        if (attribute.Name == "src")
+                        {
+                            //Validation to check if the image src is in relative path of the site.
+                            if (!attribute.Value.Trim().StartsWith("https://"))
+                            {
+                                attribute.Value = _pageUrl.Scheme + "://" + _pageUrl.Host + attribute.Value;
+                            }
+                            Console.WriteLine(attribute.Value);
+                        }
+                        allImageAttributes.Add(attribute);
+                    }
+
+                }
+                
             }
             return allImageAttributes;
         }

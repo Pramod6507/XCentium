@@ -79,7 +79,7 @@ textarea {
         border: none;
     }
     .site-images a{
-        padding:5px;
+        float:right;
     }
 }
 
