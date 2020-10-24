@@ -86,3 +86,10 @@ textarea {
 .modal-content{
     background-color: aliceblue;
 }
+
+.panel-body{
+    font-size:large;
+}
+.panel-title{
+    font-size: x-large;
+}

@@ -39,7 +39,7 @@ namespace XCentium.Infrastructure
         {
             List<string> textWordList = new List<string>();
             var root = _document.DocumentNode;
-            char[] charsToSplit = { ' ', '\n', '\r', '\t', ':', ',', '.', '(', ')', '[', ']', '{', '}', '&' };
+            char[] charsToSplit = { ' ', ';', '\n', '\r', '\t', ':', ',', '.', '(', ')', '[', ']', '{', '}', '&' };
 
             var wordList = root.InnerText.ToLower().Split(charsToSplit);
             foreach (var word in wordList)

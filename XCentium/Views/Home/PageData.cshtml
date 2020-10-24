@@ -5,20 +5,21 @@
 }
 <br />
 
-<div class="panel panel-success">
+<div class="panel panel-info">
     <div class="panel-heading">
-        <h2 class="panel-title">PageData</h2>
+        <h2 class="panel-title">Following is data from the page <strong><a href= @ViewBag.SiteAddress>@ViewBag.SiteAddress</a></strong></h2>
     </div>
     <div class="panel-body">
-        <p class="panel-title">Following is the data from @ViewBag.SiteAddress</p><br />
-        <p>Total words: @Model.SiteWordList.Count()</p>
-        <p>Load time: @Model.TimeElapsed milli Seconds</p>
-        <p>Memory Size: @Model.StreamBufferSize Bytes</p>
+        
+        <p><strong>Total no. of  words:</strong> @Model.SiteWordList.Count()</p>
+        <p><strong>Page Load time:</strong> @Model.TimeElapsed milli Seconds</p>
+        <p><strong>Memory Size:</strong> @Model.StreamBufferSize Bytes</p>
+        <p><strong>Number of images:</strong> @Model.ImageAttributeList.Count()</p>
     </div>
 </div>
 <hr />
 <h1 class="text-primary">Frequency of words</h1>
-<table class="table">
+<table class="table table-striped table-hover">
     <thead>
         <tr>
             <th>Word</th>
