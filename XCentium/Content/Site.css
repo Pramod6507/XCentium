@@ -48,3 +48,41 @@ textarea {
     .input-validation-error{
         border: 2px solid red;
     }
+
+.table .table-img{
+    max-height:100px;
+    max-width: 100px;
+}
+
+.site-images img{
+    max-width:375px;
+    max-height:375px;
+}
+
+.site-images {
+    width: 375px;
+    height: 375px;
+    border: 0.1px solid green;
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+    .site-images {
+        width: 33.33%;
+        height: 250px;
+
+    }
+}
+@media (max-width: 992px) {
+    .site-images {
+        height: 250px;
+        padding:20px;
+        border: none;
+    }
+    .site-images a{
+        padding:5px;
+    }
+}
+
+.modal-content{
+    background-color: aliceblue;
+}

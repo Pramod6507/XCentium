@@ -3,13 +3,13 @@
     ViewBag.Title = "PageData";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<br/>
+<br />
 <div class="panel panel-success">
     <div class="panel-heading">
         <h2 class="panel-title">PageData</h2>
     </div>
     <div class="panel-body">
-        <p class="panel-title">Following is the data from @ViewBag.SiteAddress</p><br/>
+        <p class="panel-title">Following is the data from @ViewBag.SiteAddress</p><br />
         <p>Total words: @Model.SiteWordList.Count()</p>
         <p>Load time: @Model.TimeElapsed milli Seconds</p>
         <p>Memory Size: @Model.StreamBufferSize Bytes</p>
@@ -33,10 +33,87 @@
     </tbody>
 </table>
 
-@{
-    foreach (var attribute in Model.ImageAttributeList)
-    {
 
-    }
+
+<p class="text-center">Click on image to enlarge</p>
+<div class="row image-gallery">
+    <div class="col-md-12">
+        @foreach (var attribute in Model.ImageAttributeList)
+        {
+            if (attribute.Name == "src")
+            {
+                <figure class="col-md-4 site-images">
+                    <a class="img-links" data-size="1600x1067" data-toggle="modal" data-target="#myModal">
+                        <img alt="picture" src=@attribute.Value @*class="img-fluid"*@>
+                    </a>
+                </figure>
+            }
+
+        } 
+
+    </div>
+</div>
+
+
+<div style="margin: auto auto 50px auto;text-align: center;padding: 30px;">
+    <a class="btn btn-primary btn-lg image-gallery-btn" id="loadMore">View more &raquo;</a>
+</div>
+
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            $(".table").DataTable({ "order": [[1, "desc"]] });
+                var imglength = $("figure").length;
+                var inc = 0;
+
+                if (imglength > 9) {
+                    $("figure").slice(9, imglength).css("display", "none");
+                    inc = 9;
+                }
+                if (imglength < 9) {
+                    $("figure").slice(3, imglength).css("display", "none");
+                    inc = 3;
+                }
+
+                $("#loadMore").click(function () {
+                    if (inc > 4) {
+                        $("figure").slice(inc, inc + 9).css("display", "block");
+                        inc = inc + 9;
+                    }
+                    if (inc < 4) {
+                        $("figure").slice(inc, inc + 3).css("display", "block");
+                        inc = inc + 3;
+                    }
+                    if (inc > imglength)
+                        $("#loadMore").css("display", "none");
+                });
+
+                $(".img-links").click(function () {
+                    var clickedImg = $(this).find("img")[0].outerHTML;
+                    $(".modal-body").html(clickedImg);
+                });
+            });
+
+    </script>
 }
-

@@ -11,12 +11,12 @@
         <div class="form-group">
             <label class="lead">Please enter a site address below to get image and word count data...</label>
             @*@Html.LabelFor(m => m.Url, new { @class = "lead" })*@
-            @Html.TextBoxFor(m => m.Url, new {@class = "form-control" })
+            @Html.TextBoxFor(m => m.Url, new { @class = "form-control" })
             @Html.ValidationMessageFor(m => m.Url)
 
         </div>
         <button type="submit" class="btn btn-primary btn-lg">Submit  &raquo;</button>
-        
+
     }
 
 </div>
@@ -42,6 +42,7 @@
         <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
     </div>
 </div>
+@Html.Partial("~/Views/Shared/_Gallery.cshtml")
 @section scripts
 {
     @Scripts.Render("~/bundles/jqueryval")
