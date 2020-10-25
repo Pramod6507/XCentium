@@ -10,22 +10,19 @@ using System.Web.Mvc;
 
 namespace XCentium.Infrastructure
 {
-    public class SiteHtmlAgility
+    public class SiteHtmlAgility : ISiteHtmlAgility
     {
         private HtmlDocument _document { get; set; }
         private Uri _pageUrl { get; set; }
         private HtmlWeb _web { get; set; }
-        public SiteHtmlAgility(string url)
-        {
-            _pageUrl = new Uri(url);
-            _web = new HtmlWeb();
 
-        }
-        public int Load()
-        {
+        public int Load(string url)
+         {
 
             try
             {
+                _pageUrl = new Uri(url);
+                _web = new HtmlWeb();
                 ServicePointManager.Expect100Continue = true;
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                 _document = _web.Load(_pageUrl);

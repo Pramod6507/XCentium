@@ -7,6 +7,11 @@ namespace XCentium.Controllers
 {
     public class HomeController : Controller
     {
+        private ISiteHtmlAgility _siteHtmlAgility;
+        public HomeController(ISiteHtmlAgility siteHtmlAgility)
+        {
+            _siteHtmlAgility = siteHtmlAgility;
+        }
         public ActionResult Index(string error)
         {
             ViewBag.Error = error;
@@ -44,12 +49,12 @@ namespace XCentium.Controllers
             else
             {
                 var pageDataViewModel = new PageDataViewModel();
-                var siteHtmlAgility = new SiteHtmlAgility(site.Url);
+                //var siteHtmlAgility = new SiteHtmlAgility();
                 ViewBag.SiteAddress = site.Url;
 
                 Stopwatch stopWatch = new Stopwatch();
                 stopWatch.Start();
-                pageDataViewModel.StreamBufferSize = siteHtmlAgility.Load();
+                pageDataViewModel.StreamBufferSize = _siteHtmlAgility.Load(site.Url);
                 stopWatch.Stop();
                 if (pageDataViewModel.StreamBufferSize == -1)
                 {
@@ -58,8 +63,8 @@ namespace XCentium.Controllers
 
 
                 pageDataViewModel.TimeElapsed = stopWatch.ElapsedMilliseconds;
-                pageDataViewModel.ImageAttributeList = siteHtmlAgility.ExtractImages();
-                pageDataViewModel.SiteWordList = siteHtmlAgility.ExtractText();
+                pageDataViewModel.ImageAttributeList = _siteHtmlAgility.ExtractImages();
+                pageDataViewModel.SiteWordList = _siteHtmlAgility.ExtractText();
                 pageDataViewModel.FrequencyMap = SiteHtmlAgility.ExtractFrequencyMap(pageDataViewModel.SiteWordList);
 
 
