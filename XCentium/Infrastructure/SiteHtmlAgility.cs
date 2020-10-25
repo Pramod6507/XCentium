@@ -1,10 +1,12 @@
 ﻿using HtmlAgilityPack;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Web;
+using System.Web.Mvc;
 
 namespace XCentium.Infrastructure
 {
@@ -21,6 +23,7 @@ namespace XCentium.Infrastructure
         }
         public int Load()
         {
+
             try
             {
                 ServicePointManager.Expect100Continue = true;
@@ -30,64 +33,93 @@ namespace XCentium.Infrastructure
             }
             catch (Exception)
             {
-
-                throw new AccessViolationException("The site is not accessible from this application");
+                return -1;
             }
 
         }
         public List<string> ExtractText()
         {
-            List<string> textWordList = new List<string>();
-            var root = _document.DocumentNode;
-            char[] charsToSplit = { ' ', ';', '\n', '\r', '\t', ':', ',', '.', '(', ')', '[', ']', '{', '}', '&' };
 
-            var wordList = root.InnerText.ToLower().Split(charsToSplit);
-            foreach (var word in wordList)
+            List<string> textWordList = new List<string>();
+            try
             {
-                if (!String.IsNullOrWhiteSpace(word.Trim()))
-                    textWordList.Add(word.Trim());
+                var root = _document.DocumentNode;
+                char[] charsToSplit = { ' ', ';', '\n', '\r', '\t', ':', ',', '.', '(', ')', '[', ']', '{', '}', '&' };
+
+                var wordList = root.InnerText.ToLower().Split(charsToSplit);
+                foreach (var word in wordList)
+                {
+                    if (!String.IsNullOrWhiteSpace(word.Trim()))
+                        textWordList.Add(word.Trim());
+                }
+                return textWordList;
+
             }
-            return textWordList;
+            catch (Exception)
+            {
+                textWordList.Add("No words were found on this page!");
+                return textWordList;
+            }
         }
 
         public List<HtmlAttribute> ExtractImages()
         {
             var allImageAttributes = new List<HtmlAttribute>();
-            if (!(_document.DocumentNode.SelectNodes("//img").Count() == 0))
+            try
             {
-                var imageNodes = _document.DocumentNode.SelectNodes("//img").ToArray();
-                
-                foreach (var imageNode in imageNodes)
+                var imageNodes = _document.DocumentNode.SelectNodes("//img").ToList();
+                imageNodes.AddRange(_document.DocumentNode.SelectNodes("//div[@style]").ToList());
+                if (!(imageNodes.Count() == 0))
                 {
-                    var imageAttributes = imageNode.Attributes.ToList();
-                    foreach (var attribute in imageAttributes)
+                    foreach (var imageNode in imageNodes)
                     {
-
-                        if (attribute.Name == "src")
+                        var imageAttributes = imageNode.Attributes.ToList();
+                        foreach (var attribute in imageAttributes)
                         {
-                            //Validation to check if the image src is in relative path of the site.
-                            if (!attribute.Value.Trim().StartsWith("https://"))
+                            if (attribute.Name == "src" | (attribute.Name == "style" && attribute.Value.Contains("background-image:")))
                             {
-                                attribute.Value = _pageUrl.Scheme + "://" + _pageUrl.Host + attribute.Value;
+
+                                //Validation to check if the image src is in relative path of the site.
+                                attribute.Value = attribute.Value.Contains("background-image:") ? attribute.Value.Split(new char[] { '(', ')' })[1] : attribute.Value;
+                                attribute.Value = attribute.Value.Contains("background=") ? attribute.Value.Split('=')[1] : attribute.Value;
+                                attribute.Value = !attribute.Value.Trim().StartsWith("https://") && !String.IsNullOrWhiteSpace(attribute.Value) ? _pageUrl.Scheme + "://" + _pageUrl.Host + attribute.Value : attribute.Value;
+
+
+
+                                if (!String.IsNullOrWhiteSpace(attribute.Value))
+                                    allImageAttributes.Add(attribute);
                             }
-                            Console.WriteLine(attribute.Value);
+
                         }
-                        allImageAttributes.Add(attribute);
+
                     }
 
                 }
-                
+            }
+            catch (ArgumentNullException)
+            {
+                return allImageAttributes;
             }
             return allImageAttributes;
         }
 
+
         public static Dictionary<string, int> ExtractFrequencyMap(List<string> wordList)
         {
-            Dictionary<string, int> frequencyMap = wordList.GroupBy(x => x)
-                .Where(g => g.Count() > 1).OrderByDescending(x => x.Count())
-                .ToDictionary(x => x.Key, x => x.Count());
+            Dictionary<string, int> frequencyMap = new Dictionary<string, int>();
+            try
+            {
+                frequencyMap = wordList.GroupBy(x => x)
+                    .Where(g => g.Count() > 1).OrderByDescending(x => x.Count())
+                    .ToDictionary(x => x.Key, x => x.Count());
 
-            return frequencyMap;
+                return frequencyMap;
+            }
+            catch (Exception)
+            {
+                return frequencyMap;
+            }
+
         }
     }
 }

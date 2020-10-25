@@ -44,11 +44,11 @@
     <div class="col-md-12">
         @foreach (var attribute in Model.ImageAttributeList)
         {
-            if (attribute.Name == "src")
+            if (attribute.Name == "src" | attribute.Name =="style")
             {
                 <figure class="col-md-4 site-images">
                     <a class="img-links" data-size="1600x1067" data-toggle="modal" data-target="#myModal">
-                        <img alt="picture" src=@attribute.Value @*class="img-fluid"*@>
+                        <img alt="picture" src='@attribute.Value' @*class="img-fluid"*@>
                     </a>
                 </figure>
             }
@@ -90,7 +90,13 @@
             $(".table").DataTable({ "order": [[1, "desc"]] });
                 var imglength = $("figure").length;
                 var inc = 0;
+                if (imglength == 0) {
+                    $(".image-gallery").html("No images were found on the page!");
+                    $("#loadMore").css("display", "none");
+                }
 
+
+           
                 if (imglength > 9) {
                     $("figure").slice(9, imglength).css("display", "none");
                     inc = 9;
