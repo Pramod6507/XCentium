@@ -64,8 +64,11 @@ namespace XCentium.Infrastructure
             var allImageAttributes = new List<HtmlAttribute>();
             try
             {
-                var imageNodes = _document.DocumentNode.SelectNodes("//img").ToList();
-                imageNodes.AddRange(_document.DocumentNode.SelectNodes("//div[@style]").ToList());
+                var imageNodes = new List<HtmlNode>();
+                if(_document.DocumentNode.SelectNodes("//img") != null)
+                    imageNodes = _document.DocumentNode.SelectNodes("//img").ToList();
+                if(_document.DocumentNode.SelectNodes("//div[@style]") != null)
+                    imageNodes.AddRange(_document.DocumentNode.SelectNodes("//div[@style]").ToList());
                 if (!(imageNodes.Count() == 0))
                 {
                     foreach (var imageNode in imageNodes)
@@ -76,12 +79,17 @@ namespace XCentium.Infrastructure
                             if (attribute.Name == "src" | (attribute.Name == "style" && attribute.Value.Contains("background-image:")))
                             {
 
-                                //Validation to check if the image src is in relative path of the site.
-                                attribute.Value = attribute.Value.Contains("background-image:") ? attribute.Value.Split(new char[] { '(', ')' })[1] : attribute.Value;
+                                //Validation to check if the image src is in relative path of the site. 
+                                //Checking to see if images is set as background-image to a div.
+                                //Or as svg data.
+                                attribute.Value = attribute.Value.Contains("background-image:") 
+                                    ? attribute.Value.Split(new char[] { '(', ')' })[1].Replace("'", "").Replace(@"\2f ","/").Replace(@"\2f","/") 
+                                    : attribute.Value;
                                 attribute.Value = attribute.Value.Contains("background=") ? attribute.Value.Split('=')[1] : attribute.Value;
-                                attribute.Value = !attribute.Value.Trim().StartsWith("https://") && !String.IsNullOrWhiteSpace(attribute.Value) ? _pageUrl.Scheme + "://" + _pageUrl.Host + attribute.Value : attribute.Value;
-
-
+                                attribute.Value = !String.IsNullOrWhiteSpace(attribute.Value) && !attribute.Value.Trim().StartsWith("https://")  && !attribute.Value.StartsWith("data:image") 
+                                    ? _pageUrl.Scheme + "://" + _pageUrl.Host + attribute.Value 
+                                    : attribute.Value;
+                                
 
                                 if (!String.IsNullOrWhiteSpace(attribute.Value))
                                     allImageAttributes.Add(attribute);

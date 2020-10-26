@@ -4,4 +4,70 @@
 <h2>@ViewBag.Title.</h2>
 <h3>@ViewBag.Message</h3>
 
-@Html.Partial("~/Views/Shared/_Gallery.cshtml")
+@*@Html.Partial("~/Views/Shared/_Gallery.cshtml")*@
+<div class="row image-gallery image-gallery-full">
+    <div id="site-images" class="col-md-12"></div>
+
+</div>
+<div style="margin: auto auto 50px auto;padding: 30px;">
+    <span style="float:left;"><a class="btn btn-primary btn-lg image-gallery-btn" id="prevPage"><< Previous </a></span>
+    <span style="float:right;"><a class="btn btn-primary btn-lg image-gallery-btn" id="nextPage">Next >></a></span>
+</div>
+<script>
+
+    var imgObj;
+    var index = 0;
+
+    $(document).ready(function () {
+
+        var nextPage = function () {
+            $("#site-images").html("");
+            for (i = index; i < index + 9; i++) {
+                if (i < imgObj.length) {
+                    var imgHtml = "<figure class='col-md-4 site-images'><a class='img-links' data-size='1600x1067' data- toggle='modal' data-target='#myModal'><img alt='picture' src='" + imgObj[i] + "'></a></figure >";
+                    $("#site-images").append(imgHtml);
+                }
+
+            }
+            index = index + 9;
+            checkButtons();
+        };
+
+        var prevPage = function () {
+            $("#site-images").html("");
+            for (i = index-10; i >= index - 18; i--) {
+                if (i >= 0) {
+                    var imgHtml = "<figure class='col-md-4 site-images'><a class='img-links' data-size='1600x1067' data- toggle='modal' data-target='#myModal'><img alt='picture' src='" + imgObj[i] + "'></a></figure >";
+                    $("#site-images").prepend(imgHtml);
+                }
+
+            }
+            index = index - 9;
+            checkButtons();
+
+        };
+
+        var checkButtons = function () {
+            if (index <= 9)
+                $("#prevPage").hide();
+            else
+                $("#prevPage").show();
+
+            if (index >= imgObj.length)
+                $("#nextPage").hide();
+            else
+                $("#nextPage").show();
+        }
+
+        $("#prevPage").click(function () { prevPage(); });
+        $("#nextPage").click(function () { nextPage(); });
+
+        $.ajax({
+            url: "/api/GetImages/Images?url=https://www.skinmedica.com/", success: function (result) {
+                imgObj = result;
+                nextPage();
+            }
+        });
+
+    });
+</script>

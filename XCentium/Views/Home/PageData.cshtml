@@ -7,10 +7,10 @@
 
 <div class="panel panel-info">
     <div class="panel-heading">
-        <h2 class="panel-title">Following is data from the page <strong><a href= @ViewBag.SiteAddress>@ViewBag.SiteAddress</a></strong></h2>
+        <h2 class="panel-title">Following is data from the page <strong><a id="siteaddr" href=@ViewBag.SiteAddress>@ViewBag.SiteAddress</a></strong></h2>
     </div>
     <div class="panel-body">
-        
+
         <p><strong>Total no. of  words:</strong> @Model.SiteWordList.Count()</p>
         <p><strong>Page Load time:</strong> @Model.TimeElapsed milli Seconds</p>
         <p><strong>Memory Size:</strong> @Model.StreamBufferSize Bytes</p>
@@ -21,7 +21,7 @@
 <h1 class="text-primary">Frequency of words</h1>
 <table class="table table-striped table-hover">
     <thead>
-        <tr>
+        <tr class="success">
             <th>Word</th>
             <th>Frequency</th>
         </tr>
@@ -40,28 +40,16 @@
 <hr />
 <h1 class="text-primary text-center">Image Gallery</h1>
 <p class="text-center">Click on image to enlarge</p>
-<div class="row image-gallery">
-    <div class="col-md-12">
-        @foreach (var attribute in Model.ImageAttributeList)
-        {
-            if (attribute.Name == "src" | attribute.Name =="style")
-            {
-                <figure class="col-md-4 site-images">
-                    <a class="img-links" data-size="1600x1067" data-toggle="modal" data-target="#myModal">
-                        <img alt="picture" src='@attribute.Value' @*class="img-fluid"*@>
-                    </a>
-                </figure>
-            }
 
-        } 
+<div class="row image-gallery image-gallery-full">
+    <div id="site-images" class="col-md-12"></div>
 
-    </div>
+</div>
+<div style="margin: auto auto 50px auto;padding: 30px;">
+    <span style="float:left;"><a class="btn btn-primary btn-lg image-gallery-btn" id="prevPage"><< Back </a></span>
+    <span style="float:right;"><a class="btn btn-primary btn-lg image-gallery-btn" id="nextPage">Next >></a></span>
 </div>
 
-
-<div style="margin: auto auto 50px auto;text-align: center;padding: 30px;">
-    <a class="btn btn-primary btn-lg image-gallery-btn" id="loadMore">View more &raquo;</a>
-</div>
 
 <div id="myModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -86,44 +74,79 @@
 {
     @Scripts.Render("~/bundles/jqueryval")
     <script>
+        var imgObj;
+        var index = 0;
+        var startTemplate = "<figure class='col-md-4 site-images'><a class='img-links' data-size='1600x1067' data- toggle='modal'><img alt='picture' src='";
+        var endTemplate = "'></a></figure >";
         $(document).ready(function () {
             $(".table").DataTable({ "order": [[1, "desc"]] });
-                var imglength = $("figure").length;
-                var inc = 0;
-                if (imglength == 0) {
-                    $(".image-gallery").html("No images were found on the page!");
-                    $("#loadMore").css("display", "none");
-                }
+            var imglength = $("figure").length;
+            var inc = 0;
 
 
-           
-                if (imglength > 9) {
-                    $("figure").slice(9, imglength).css("display", "none");
-                    inc = 9;
-                }
-                if (imglength < 9) {
-                    $("figure").slice(3, imglength).css("display", "none");
-                    inc = 3;
-                }
 
-                $("#loadMore").click(function () {
-                    if (inc > 4) {
-                        $("figure").slice(inc, inc + 9).css("display", "block");
-                        inc = inc + 9;
+            var nextPage = function () {
+                $("#site-images").html("");
+                for (i = index; i < index + 9; i++) {
+                    if (i < imgObj.length) {
+                        var imgHtml = startTemplate + imgObj[i] + endTemplate;
+                        $("#site-images").append(imgHtml);
                     }
-                    if (inc < 4) {
-                        $("figure").slice(inc, inc + 3).css("display", "block");
-                        inc = inc + 3;
+
+                }
+                index = index + 9;
+                checkButtons();
+            };
+
+            var prevPage = function () {
+                $("#site-images").html("");
+                for (i = index - 10; i >= index - 18; i--) {
+                    if (i >= 0) {
+                        var imgHtml = startTemplate + imgObj[i] + endTemplate;
+                        $("#site-images").prepend(imgHtml);
                     }
-                    if (inc > imglength)
-                        $("#loadMore").css("display", "none");
-                });
+
+                }
+
+                index = index - 9;
+                checkButtons();
+
+            };
+
+            var checkButtons = function () {
+                if (index <= 9)
+                    $("#prevPage").hide();
+                else
+                    $("#prevPage").show();
+
+                if (index >= imgObj.length)
+                    $("#nextPage").hide();
+                else
+                    $("#nextPage").show();
 
                 $(".img-links").click(function () {
                     var clickedImg = $(this).find("img")[0].outerHTML;
                     $(".modal-body").html(clickedImg);
+                    $('#myModal').modal('show');
                 });
+            }
+
+            $("#prevPage").click(function () { prevPage(); });
+            $("#nextPage").click(function () { nextPage(); });
+            var urltext = $("#siteaddr").text();
+            $.ajax({
+                url: "/api/GetImages/Images",
+                type: "get",
+                data: {
+                    url: urltext
+                },
+                success: function (result) {
+                    imgObj = result;
+                    nextPage();
+                }
             });
+            console.log(imgObj);
+        });
 
     </script>
 }
