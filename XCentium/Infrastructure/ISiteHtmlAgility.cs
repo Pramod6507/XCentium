@@ -8,5 +8,6 @@ namespace XCentium.Infrastructure
         List<HtmlAttribute> ExtractImages();
         List<string> ExtractText();
         int Load(string url);
+        Dictionary<string, int> ExtractFrequencyMap(List<string> wordList);
     }
 }

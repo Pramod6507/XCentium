@@ -109,7 +109,7 @@ namespace XCentium.Infrastructure
         }
 
 
-        public static Dictionary<string, int> ExtractFrequencyMap(List<string> wordList)
+        public Dictionary<string, int> ExtractFrequencyMap(List<string> wordList)
         {
             Dictionary<string, int> frequencyMap = new Dictionary<string, int>();
             try
